@@ -1,0 +1,21 @@
+{
+    "name": "claude/nianthio_auto",
+    "authors": [
+        {
+            "name": "Edem Caude K."
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "App/",
+            "Class\\": "Class/"
+        }
+    },
+    "require": {
+        "ext-pdo": "*",
+        "symfony/var-dumper": "^6.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "10"
+    }
+}
