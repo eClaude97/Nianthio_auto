@@ -70,14 +70,14 @@ class MarkController extends AppController
             $mark = Mark::find($_POST['edit']);
             $resp = Functions::uploadFiles($_FILES['logo'], 'Storage/logo/');
             if ($resp['success'] && $resp['error'] === false) {
-                $oldPath = $mark->logoPath;
+                $oldPath = $mark->logoPath();
                 $now = new DateTime();
                 $datas = array(
                     'name' => $name,
                     'logo' => $resp['name'],
                     'update_at' => $now->format('Y-m-d-H-i')
                 );
-                $response = $mark->update($datas);
+                $response = $mark->update($mark->getId(), $datas);
                 if ($response){
                     if (file_exists($oldPath)) unlink($oldPath);
                     $this->index('La Marque a été modifier avec succès');
@@ -112,8 +112,8 @@ class MarkController extends AppController
             if (!is_object($mark)){
                 $this->index(error: 'Erreur de suppression de l\'élément');
             } else {
-                $dir = $mark->logoPath;
-                if ($mark->delete()) {
+                $dir = $mark->logoPath();
+                if ($mark->delete($mark->getId())) {
                     if (file_exists($dir)) unlink($dir);
                     header("location:  ?p=admin.mark.index");
                 }

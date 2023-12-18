@@ -35,17 +35,17 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php $i = 0;foreach ($models ?? [] as $model): ?>
+                                <?php $i = 0;foreach ($models ?? [] as /* @var App\Models\Model $model */$model): ?>
                                     <tr>
                                         <td><?=  ++$i ?></td>
-                                        <td><?= $model->title ?></td>
-                                        <td><?= $model->year ?></td>
-                                        <td><?= $model->mark->name ?></td>
+                                        <td><?= $model->getTitle() ?></td>
+                                        <td><?= $model->getYear() ?></td>
+                                        <td><?= $model->mark->getName() ?></td>
                                         <td>
                                             <div class="d-flex float-right">
-                                                <a href="?p=admin.model.edit&id=<?=$model->token?>" class="btn btn-secondary mx-2">Edit</a>
+                                                <a href="?p=admin.model.edit&id=<?=$model->getToken()?>" class="btn btn-secondary mx-2">Edit</a>
                                                 <form action="?p=admin.model.delete" method="post">
-                                                    <button type="submit" class="btn btn-danger" name="delete" value="<?=$model->id?>">Delete</button>
+                                                    <button type="submit" class="btn btn-danger" name="delete" value="<?=$model->getId()?>">Delete</button>
                                                 </form>
                                             </div>
                                         </td>

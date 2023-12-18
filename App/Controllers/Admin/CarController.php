@@ -83,13 +83,13 @@ class CarController extends AppController
         /* @var Car $car */
         $car = Car::find($id);
         if (is_object($car)) {
-            (new Car_Pictures())->delete('car_id', $car->id);
+            (new Car_Pictures())->delete('car_id', $car->getId());
             foreach ($car->pictures as $picture) {
                 if (file_exists($picture->path())) unlink($picture->path()); else {
                     return false;
                 }
             }
-            if ($car->delete()) return true;
+            if ($car->delete($car->getId())) return true;
         }
         return false;
     }
@@ -148,7 +148,7 @@ class CarController extends AppController
                     }
                 }
                 if ( $failed ){
-                    if (!$this->forDelete($car->id)) header('location: page404.php');
+                    if (!$this->forDelete($car->getId())) header('location: page404.php');
                 }
             } else {
                 $this->add("Add Error");

@@ -52,7 +52,7 @@ class Form
         $field = /* @lang HTML */
             "<div class='form-group " . $class . "'>";
         $field .= "<label for=$name>$label</label><select id=$name name=$name class='form-control' $required><option selected disabled>Choose $label</option>";
-        foreach ($options as $option) $field .= "<option ". ($old === $option['value'] ? 'selected' : '') ." value='" . $option['value'] . "'>" . $option['text'] . "</option>";
+        foreach ($options as $option) $field .= "<option ". ($old == $option['value'] ? 'selected' : '') ." value='" . $option['value'] . "'>" . $option['text'] . "</option>";
         $field .= "</select><div class='invalid-feedback'>Champ requis !</div></div>";
         return $field;
     }

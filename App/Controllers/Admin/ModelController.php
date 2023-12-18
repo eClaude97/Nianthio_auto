@@ -86,7 +86,7 @@ class ModelController extends AppController
                     'mark_id' => $mark_id,
                     'update_at' => $now->format('Y-m-d-H-i')
                 );
-                $response = $model->update($datas);
+                $response = $model->update($model->getId(), $datas);
                 if ($response) {
                     $this->index('La Marque a été modifier avec succès');
                 } else {
@@ -107,7 +107,7 @@ class ModelController extends AppController
             extract($_POST);
             /* @var Model $model*/
             $model = Model::find($delete);
-            if ($model->delete()) {
+            if ($model->delete($model->getId())) {
                 header('location: ?p=admin.model.index');
             } else {
                 $this->index(error: 'Erreur de suppression de l\'élément');

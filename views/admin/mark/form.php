@@ -18,12 +18,13 @@
                     <h4>Formulaire de <?= isset($mark) ? 'Modification' : 'Création'?> d'une Marque</h4>
                 </div>
                 <div class="card-body">
-                    <?= /* @var \Class\Form $form */$form->inputField('name', values: $mark->name ?? '', label: 'Nom', required: 'required') ?>
+                    <?= /* @var \Class\Form $form */
+                        $form->inputField('name', values: isset($mark) ? $mark->getName() : '', label: 'Nom', required: 'required') ?>
                     <?= $form->fileField('logo', required: 'required') ?>
                 </div>
                 <div class="card-footer">
                     <?php if (isset($mark)) : ?>
-                        <button name="edit" value="<?=$mark->id?>" type="submit" class="btn btn-primary">Modifier</button>
+                        <button name="edit" value="<?=$mark->getId()?>" type="submit" class="btn btn-primary">Modifier</button>
                     <?php else : ?>
                         <button name="add" type="submit" class="btn btn-primary">Créer</button>
                     <?php endif; ?>

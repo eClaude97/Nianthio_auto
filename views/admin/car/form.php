@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Car;
 use Class\Form;
+/* @var Car $car */ $car = $car ?? null;
 
 ?>
 <!-- Main Content -->
@@ -25,7 +27,7 @@ use Class\Form;
                 <div class="card-body">
                     <div class="row">
                         <?=/* @var Form $form */
-                        $form->selectField('mark_id', $marks ?? [], $car->mark_id ?? '', 'Choisir la Marque', 'required', 'col-md-6') ?>
+                        $form->selectField('mark_id', $marks ?? [], (!is_null($car)) ? $car->getMarkId() : '', 'Choisir la Marque', 'required', 'col-md-6') ?>
                         <div class="form-group col-md-6">
                             <label for="model_id">Modèles</label>
                             <select name="model_id" class="form-control" id="model_id" disabled="" required="">
@@ -34,20 +36,20 @@ use Class\Form;
                         </div>
                     </div>
                     <div class="row">
-                        <?= $form->inputField('matricule', values: $car->matricule ?? '', class: 'col-md-6') ?>
-                        <?= $form->inputField('title', values: $car->title ?? '', label: 'Titre', required: 'required', class: 'col-md-6') ?>
+                        <?= $form->inputField('matricule', values:(!is_null($car))? $car->getMatricule() : '', class: 'col-md-6') ?>
+                        <?= $form->inputField('title', values:(!is_null($car))? $car->getTitle() : '', label: 'Titre', required: 'required', class: 'col-md-6') ?>
                     </div>
                     <div class="row">
-                        <?= $form->inputField('price', 'number', $car->price ?? '','Prix','required',class: 'col') ?>
-                        <?= $form->inputField('mileage', 'number', $car->mileage ?? '','Kilométrage','required',class: 'col') ?>
-                        <?= $form->inputField('doors', 'number', $car->doors ?? '','Nombre de portes','required',class: 'col') ?>
-                        <?= $form->inputField('seats', 'number', $car->seats ?? '','Nombre de places','required',class: 'col') ?>
+                        <?= $form->inputField('price', 'number', (!is_null($car)) ? $car->getPrice() : '','Prix','required',class: 'col') ?>
+                        <?= $form->inputField('mileage', 'number', (!is_null($car)) ? $car->getMileage() : '','Kilométrage','required',class: 'col') ?>
+                        <?= $form->inputField('doors', 'number', (!is_null($car)) ? $car->getDoors() : '','Nombre de portes','required',class: 'col') ?>
+                        <?= $form->inputField('seats', 'number', (!is_null($car)) ? $car->getSeats() : '','Nombre de places','required',class: 'col') ?>
                     </div>
                     <div class="row">
-                        <?= $form->selectField('type', $types ?? [], $car->type ?? '' , required: 'required', class: 'col') ?>
-                        <?= $form->selectField('color', $colors ?? [], $car->color ?? '' , required: 'required', class: 'col') ?>
-                        <?= $form->selectField('energy', $energies ?? [], $car->energy ?? '' , 'Carburant', required: 'required', class: 'col') ?>
-                        <?= $form->selectField('transmission', $transmissions ?? [], $car->transmission ?? '' , 'Type de transmission', required: 'required', class: 'col') ?>
+                        <?= $form->selectField('type', $types ?? [], (!is_null($car)) ? $car->getType() : '' , required: 'required', class: 'col') ?>
+                        <?= $form->selectField('color', $colors ?? [], (!is_null($car)) ? $car->getColor() : '' , required: 'required', class: 'col') ?>
+                        <?= $form->selectField('energy', $energies ?? [], (!is_null($car)) ? $car->getEnergy() : '' , 'Carburant', required: 'required', class: 'col') ?>
+                        <?= $form->selectField('transmission', $transmissions ?? [], (!is_null($car)) ? $car->getTransmission() : '' , 'Type de transmission', required: 'required', class: 'col') ?>
                     </div>
                     <div class="row col-md-12 m-auto" >
                         <?= $form->checkboxField('sold', '', 'Vendu', 'required', 'col') ?>

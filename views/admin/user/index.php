@@ -34,22 +34,22 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php $i = 0;foreach ($users ?? [] as $user): ?>
+                                <?php $i = 0;foreach ($users ?? [] as /* @var App\Models\User $user */$user): ?>
                                     <tr>
                                         <td><?= ++$i ?></td>
                                         <td><img src="<?= file_exists($user->picture()) ? $user->picture() : 'assets/img/avatar/avatar-1.png' ?>"
                                                  class="rounded" width="50" height="50"  alt=""></td>
-                                        <td><?= "$user->firstname $user->lastname" ?></td>
-                                        <td><?= $user->email ?></td>
-                                        <td><?= $user->address ?></td>
-                                        <td><?= $user->tel ?></td>
-                                        <td><?= $user->job ?></td>
-                                        <td><?= $user->active ? 'actif':'inactif' ?></td>
+                                        <td><?= $user->name() ?></td>
+                                        <td><?= $user->getEmail() ?></td>
+                                        <td><?= $user->getAddress() ?></td>
+                                        <td><?= $user->getTel() ?></td>
+                                        <td><?= $user->getJob() ?></td>
+                                        <td><?= $user->isActive() ? 'actif':'inactif' ?></td>
                                         <td>
                                             <div class="d-flex float-right">
-                                                <a href="?p=admin.user.profil&id=<?=$user->token?>" class="btn btn-secondary mx-2">Detail</a>
+                                                <a href="?p=admin.user.profil&id=<?=$user->getToken()?>" class="btn btn-secondary mx-2">Detail</a>
                                                 <form action="?p=admin.user.delete" method="post">
-                                                    <button type="submit" class="btn btn-danger" name="delete" value="<?=$user->id?>">Delete</button>
+                                                    <button type="submit" class="btn btn-danger" name="delete" value="<?=$user->getId()?>">Delete</button>
                                                 </form>
                                             </div>
                                         </td>

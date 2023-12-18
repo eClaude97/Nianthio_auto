@@ -1,5 +1,5 @@
 <?php
- /* @var \App\Models\User $user */ $user = $user ?? ''
+ /* @var App\Models\User $user */ $user = $user ?? ''
 ?>
 <!-- Main Content -->
  <div class="main-content">
@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="section-body">
-            <h2 class="section-title">Hi, <?= $user->firstname ?>!</h2>
+            <h2 class="section-title">Hi, <?= $user->getFirstname() ?>!</h2>
             <p class="section-lead">
                 Change information about yourself on this page.
             </p>
@@ -40,14 +40,14 @@
                             </div>
                         </div>
                         <div class="profile-widget-description">
-                            <div class="profile-widget-name"><?= $user->name ?> <div class="text-muted d-inline font-weight-normal"><div class="slash"></div> <?= $user->job ?></div></div>
-                            <?= $user->about ?><br/>
+                            <div class="profile-widget-name"><?= $user->name() ?> <div class="text-muted d-inline font-weight-normal"><div class="slash"></div> <?= $user->getJob() ?></div></div>
+                            <?= $user->getAbout() ?><br/>
                         </div>
                         <div class="card-footer text-center">
                             <?php if(file_exists($user->doc())) :?>
                                 <a href="<?= $user->doc() ?>" class="link nav-link">Voir de document</a>
                             <?php endif; ?>
-                            <div class="font-weight-bold mb-2">Follow <?= $user->name ?> On</div>
+                            <div class="font-weight-bold mb-2">Follow <?= $user->name() ?> On</div>
                             <a href="#" class="btn btn-social-icon btn-facebook mr-1">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
@@ -74,24 +74,24 @@
                             </div>
                             <div class="card-body">
                                 <div class="row">
-                                    <?= /* @var \Class\Form $form */
-                                    $form->inputField('firstname', values: $user->firstname ?? '', label: 'Prénom', required: 'required', class: 'col-md-6') ?>
-                                    <?= $form->inputField('lastname', values: $user->lastname ?? '', label: 'Nom', required: 'required', class: 'col-md-6') ?>
+                                    <?= /* @var Class\Form $form */
+                                    $form->inputField('firstname', values: $user->getFirstname() ?? '', label: 'Prénom', required: 'required', class: 'col-md-6') ?>
+                                    <?= $form->inputField('lastname', values: $user->getLastname() ?? '', label: 'Nom', required: 'required', class: 'col-md-6') ?>
                                 </div>
                                 <div class="row">
-                                    <?= $form->inputField('tel', 'number', $user->tel ?? '', 'Téléphone', required: 'required', class: 'col') ?>
-                                    <?= $form->inputField('address', 'text',$user->address ?? '' ,'Adresse', required: 'required', class: 'col') ?>
-                                    <?= $form->inputField('job', 'text',$user->job ?? '' ,'Profession', required: 'required', class: 'col') ?>
+                                    <?= $form->inputField('tel', 'number', $user->getTel() ?? '', 'Téléphone', required: 'required', class: 'col') ?>
+                                    <?= $form->inputField('address', 'text',$user->getAddress() ?? '' ,'Adresse', required: 'required', class: 'col') ?>
+                                    <?= $form->inputField('job', 'text',$user->getJob() ?? '' ,'Profession', required: 'required', class: 'col') ?>
                                 </div>
                                 <div class="form-group row mt-3 mb-2">
                                     <label for="about" class="col-form-label text-left col-12 mb-2">Description</label>
                                     <div class="col-sm-12">
-                                        <textarea id="about" name="about" class="summernote"><?= $user->about ?? '' ?></textarea>
+                                        <textarea id="about" name="about" class="summernote"><?= $user->getAbout() ?? '' ?></textarea>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button name="edit" value="<?= $user->id ?? ''?>" type="submit" class="btn btn-primary">Modifier</button>
+                                <button name="edit" value="<?= $user->getId() ?? ''?>" type="submit" class="btn btn-primary">Modifier</button>
                             </div>
                         </form>
                     </div>

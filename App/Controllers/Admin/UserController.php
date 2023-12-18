@@ -106,7 +106,7 @@ class UserController extends AppController
                     'about' => $about, 'job' => $job,
                     'update_at' => (new DateTime())->format('Y-m-d-H-i')
                 );
-                $response = $user->update($datas);
+                $response = $user->update($user->getId(), $datas);
                 if ($response){
                     $this->index('L\'utilisateur a été modifier avec succès');
                 }
@@ -131,7 +131,7 @@ class UserController extends AppController
             }
             if (!$failed){
                 $datas = array('active' => 1, 'update_at' => (new DateTime())->format('Y-m-d-H-i'));
-                $response = $user->update($datas);
+                $response = $user->update($user->getId(), $datas);
                 if ($response){
                     $this->index('Votre compte est désormais actif');
                 }
@@ -150,17 +150,17 @@ class UserController extends AppController
         if (isset($_POST['change_pass'])){
             extract($_POST);
             $failed = false;
-            $user = User::find($_POST['change_pass']);
-            if ( $user === false) $failed = true;
+            /* @var User $user */$user = User::find($_POST['change_pass']);
+            if (!$user) $failed = true;
             else{
-                if ($user->password !== $oldPass || $newPass !== $reNewPass) $failed = true;
+                if ($user->getPassword() !== $oldPass || $newPass !== $reNewPass) $failed = true;
             }
             if (!$failed){
                 $datas = array(
                     'password' => SHA1($newPass),
                     'update_at' => (new DateTime())->format('Y-m-d-H-i')
                 );
-                $response = $user->update($datas);
+                $response = $user->update($user->getId() , $datas);
                 if ($response){
                     $this->index('Mot de passe modifié avec succès');
                 }
@@ -193,7 +193,7 @@ class UserController extends AppController
                     $datas = array('doc' => $fichier['name'], 'create_at' => (new DateTime())->format('d-m-Y-H-i-s'));
                     $oldFile = $user->doc();
                 }
-                $response = $user->update($datas);
+                $response = $user->update($user->getId(), $datas);
                 if ($response){
                     if (isset($oldFile) && file_exists($oldFile)) unlink($oldFile);
                     $this->profil();
@@ -223,13 +223,13 @@ class UserController extends AppController
         if (isset($_POST['delete']))
             {
                 extract($_POST);
-                $user = User::find($delete);
+                /* @var User $user */$user = User::find($delete);
                 if (!is_object($user)){
                     $this->index(error: 'Erreur de chargement de l\'utilisateur');
                 } else {
                     $oImg = $user->picture();
                     $oDoc = $user->doc();
-                    if ($user->delete()) {
+                    if ($user->delete($user->getId())) {
                         if (file_exists($oDoc)) unlink($oDoc);
                         if (file_exists($oImg)) unlink($oImg);
                         header("location:  ?p=admin.user.index");

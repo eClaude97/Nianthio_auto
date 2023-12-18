@@ -33,20 +33,20 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php $i = 0;foreach ($cars ?? [] as $car): ?>
+                                <?php $i = 0;foreach ($cars ?? [] as /* @var App\Models\Car $car*/$car): ?>
                                     <tr>
                                         <td><?= ++$i ?></td>
-                                        <td><?= $car->matricule ?? 'Sans Matricule' ?></td>
-                                        <td><?= $car->title ?></td>
+                                        <td><?= $car->getMatricule() ?? 'Sans Matricule' ?></td>
+                                        <td><?= $car->getTitle() ?></td>
                                         <td><?= $car->modelMark ?></td>
-                                        <td><?= $car->type ?></td>
+                                        <td><?= $car->getType() ?></td>
                                         <td><?= $car->user ?></td>
-                                        <td><?= ($car->sold) ? 'Oui' : 'Non' ?> | <?= ($car->rented) ? 'Oui' : 'Non' ?></td>
+                                        <td><?= ($car->isSold()) ? 'Oui' : 'Non' ?> | <?= ($car->isRented()) ? 'Oui' : 'Non' ?></td>
                                         <td>
                                             <div class="d-flex float-right">
-                                                <a href="?p=admin.car.edit&id=<?=$car->token?>" class="btn btn-secondary mx-2">Edit</a>
+                                                <a href="?p=admin.car.edit&id=<?=$car->getToken()?>" class="btn btn-secondary mx-2">Edit</a>
                                                 <form action="?p=admin.car.delete" method="post">
-                                                    <button type="submit" class="btn btn-danger" name="delete" value="<?=$car->id?>">Delete</button>
+                                                    <button type="submit" class="btn btn-danger" name="delete" value="<?=$car->getId()?>">Delete</button>
                                                 </form>
                                             </div>
                                         </td>

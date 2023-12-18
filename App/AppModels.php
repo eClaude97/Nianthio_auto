@@ -10,10 +10,8 @@ use stdClass;
  */
 class AppModels
 {
-    public int $id;
 
     public function __construct(){}
-
 
     /**
      * Cette methode permet de générer un token unique à pour chaque ligne de la table
@@ -58,10 +56,11 @@ class AppModels
 
     /**
      * Cette fonction permet de faire la mise à jour d'une ligne de la table dans la base de données
+     * @param $id
      * @param array $datas
      * @return bool
      */
-    public function update(array $datas = []) : bool
+    public function update($id, array $datas = []) : bool
     {
 
         $class = strtolower(self::getClass());
@@ -69,7 +68,7 @@ class AppModels
             return "$key = ?";
         }, array_keys($datas)));
 
-        $state = CONNECT->prepare("UPDATE $class SET $updateString WHERE id = $this->id ");
+        $state = CONNECT->prepare("UPDATE $class c SET $updateString WHERE c.id = $id");
         try {
             return $state->execute(array_merge(array_values($datas)));
         } catch (PDOException $e) {
@@ -80,14 +79,15 @@ class AppModels
 
     /**
      * Cette methode permet de supprimer une ligne de la base de donnée
+     * @param $id
      * @param string $keyName Peut-être 'token' ou id par défaut
      * @return bool
      */
-    public function delete(string $keyName = 'id') : bool
+    public function delete($id, string $keyName = 'id') : bool
     {
         $table = strtolower(self::getClass());
         $state = CONNECT->prepare("DELETE FROM $table WHERE $keyName = ?");
-        $state->bindParam(1, $this->id);
+        $state->bindParam(1, $id);
         return $state->execute();
     }
 

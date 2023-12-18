@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\AppController;
-use App\Models\Auth;
 use App\Models\User;
 use Class\Form;
 
@@ -26,13 +25,11 @@ class AuthController extends AppController
     {
         if (isset($_POST['log'])){
             extract($_POST);
-            $authUser = new User();
-            $authUser->_init($login, $password);
-            $user = $authUser->connect();
+            $user = User::connect($login, SHA1($password));
             if (!$user) {
                 $this->login('Login ou mot de passe incorrect');
             } else {
-                $_SESSION = $user;
+                $_SESSION['user'] = $user;
                 header("location: ?p=admin.user.index");
             }
         }

@@ -31,18 +31,18 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php $i = 0;foreach ($marks ?? [] as $mark): ?>
+                                <?php $i = 0;foreach ($marks ?? [] as /* @var App\Models\Mark $mark*/ $mark): ?>
                                 <tr>
                                     <td><?=  ++$i ?></td>
                                     <td class="align-middle">
-                                        <img src="<?= $mark->logoPath ?>" alt="logo" width="" height="60" class="rounded"/>
+                                        <img src="<?= $mark->logoPath() ?>" alt="logo" width="" height="60" class="rounded"/>
                                     </td>
-                                    <td class="align-middle font-weight-bold"><?= $mark->name ?></td>
+                                    <td class="align-middle font-weight-bold"><?= $mark->getName() ?></td>
                                     <td class="align-middle">
                                         <div class="d-flex float-right">
-                                            <a href="?p=admin.mark.edit&id=<?=$mark->token?>" class="btn btn-secondary mx-2">Edit</a>
+                                            <a href="?p=admin.mark.edit&id=<?=$mark->getToken()?>" class="btn btn-secondary mx-2">Edit</a>
                                             <form action="?p=admin.mark.delete" method="post">
-                                                <button type="submit" name="delete" value="<?=$mark->id?>" href="#" class="btn btn-danger">Delete</button>
+                                                <button type="submit" name="delete" value="<?=$mark->getId()?>" href="#" class="btn btn-danger">Delete</button>
                                             </form>
                                         </div>
                                     </td>

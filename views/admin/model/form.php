@@ -23,13 +23,13 @@
                 </div>
                 <div class="card-body">
                     <?= /* @var \Class\Form $form */
-                    $form->inputField('title', values: $model->title ?? '', label: 'Titre', required: 'required') ?>
-                    <?= $form->inputField('year', values: $model->year ?? '', label: 'Année', required: 'required') ?>
-                    <?= $form->selectField('mark_id', $options ?? [], $model->mark_id ?? '', 'Marque', 'required') ?>
+                    $form->inputField('title', values: isset($model) ? $model->getTitle() : '', label: 'Titre', required: 'required') ?>
+                    <?= $form->inputField('year', values: isset($model) ? $model->getYear() : '', label: 'Année', required: 'required') ?>
+                    <?= $form->selectField('mark_id', $options ?? [], isset($model) ? $model->getMarkId() : '', 'Marque', 'required') ?>
                 </div>
                 <div class="card-footer">
                     <?php if (isset($model)) : ?>
-                        <button name="edit" value="<?=$model->id?>" type="submit" class="btn btn-primary">Modifier</button>
+                        <button name="edit" value="<?=$model->getId()?>" type="submit" class="btn btn-primary">Modifier</button>
                     <?php else : ?>
                         <button name="add" type="submit" class="btn btn-primary">Créer</button>
                     <?php endif; ?>
