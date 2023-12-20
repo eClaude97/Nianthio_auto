@@ -109,12 +109,17 @@ window.dataLayer = window.dataLayer || [];
         <ul class="navbar-nav navbar-right">
           <li class="dropdown">
               <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                <img alt="image" src="<?= 'assets/img/avatar/avatar-1.png' ?>" class="rounded-circle mr-1">
+                <img alt="image" src="
+                    <?= (file_exists("Storage/profil/img/{$_SESSION['user']['picture']}"))
+                        ? "Storage/profil/img/{$_SESSION['user']['picture']}"
+                        : 'assets/img/avatar/avatar-1.png' ?>
+                    "
+                     class="rounded-circle mr-1" >
                 <div class="d-sm-none d-lg-inline-block">Hi, <?= $_SESSION['user']['firstname'] ?></div>
               </a>
                 <div class="dropdown-menu dropdown-menu-right">
                     <div class="dropdown-title">Logged in 5 min ago</div>
-                    <a href="#" class="dropdown-item has-icon">
+                    <a href="?p=admin.user.profil&id=<?= $_SESSION['user']['token']?>" class="dropdown-item has-icon">
                         <i class="far fa-user"></i> Profile
                     </a>
                     <a href="#" class="dropdown-item has-icon">
@@ -124,15 +129,15 @@ window.dataLayer = window.dataLayer || [];
                         <i class="fas fa-cog"></i> Settings
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item has-icon text-danger">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </a>
+                    <form action="?p=auth.logout" class="dropdown-item has-icon text-danger" method="post">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <button name="logout" type="submit" class="text-danger border-0 d-inline bg-transparent">
+                                Se déconnecter
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            </li>
-            <li>
-                <form action="?p=auth.logout" method="POST">
-                    <button name="logout" type="submit" class="btn btn-danger">Se déconnecter</button>
-                </form>
             </li>
         </ul>
       </nav>
@@ -174,10 +179,10 @@ window.dataLayer = window.dataLayer || [];
             <li class="dropdown">
               <a href="#" class="nav-link has-dropdown"><i class="far fa-user"></i> <span>Auth</span></a>
               <ul class="dropdown-menu">
-                <li><a href="?p=admin.user.profil">Profil</a></li>
+                <li><a href="?p=admin.user.profil&id=<?= $_SESSION['user']['token']?>">Profil</a></li>
                 <li><a href="?p=auth.login">Login</a></li>
-                <li><a href="#">Register</a></li>
-                <li><a href="#">Reset Password</a></li>
+                <li><a href="?p=admin.user.add">Register</a></li>
+                <li><a href="?p=admin.user.profil&id=<?= $_SESSION['user']['token']?>#reset_pass">Reset Password</a></li>
               </ul>
             </li>
           </ul>

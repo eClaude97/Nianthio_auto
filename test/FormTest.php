@@ -13,7 +13,7 @@ class FormTest extends TestCase
         $result = $form->inputField('name');
 
         $expect = "<div class='form-group '><label for=name>Name</label><input type=text class='form-control'"
-            ." id=name name=name placeholder=Name value=''  ><div class='invalid-feedback'>Champ requis !</div></div>";
+            ." id=name name=name value=''  ><div class='invalid-feedback'>Champ requis !</div></div>";
 
         $this->assertSame($expect, $result);
     }

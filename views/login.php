@@ -5,7 +5,7 @@
                 <div class="login-brand">
                     <img src="assets/img/stisla-fill.svg" alt="logo" width="100" class="shadow-light rounded-circle">
                 </div>
-                <div class="card card-primary">
+                <div class="card <?= (isset($error)) ? 'card-danger' : 'card-primary' ?>">
                     <div class="card-header"><h4>Login</h4></div>
                     <?php  if (isset($error)) : ?>
                         <div class="alert alert-danger"><?= $error ?></div>

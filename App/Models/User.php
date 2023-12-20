@@ -228,7 +228,7 @@ class User extends AppModels
 
     public function doc(): string
     {
-        return 'Storage/profil/doc/' . $this->doc;
+        return 'Storage/profil/docs/' . $this->doc;
     }
 
     public static function connect(string $username, string $password) : Array|User|false

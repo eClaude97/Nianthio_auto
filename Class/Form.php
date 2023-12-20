@@ -10,24 +10,22 @@ class Form
      * @param string $values
      * @param string|null $label
      * @param string|null $required
-     * @param string $placeholder
      * @param string|null $class
      * @return string
      */
-    public function inputField(string $name, string $type = 'text',string $values = '', ?string $label = null, ?string $required = null, string $placeholder = '',string $class = null): string
+    public function inputField(string $name, string $type = 'text',string $values = '', ?string $label = null, ?string $required = null,string $class = null): string
     {
         if (is_null($required)) $label = $label ?? ucfirst($name);else {
             $label = $label ?? ucfirst($name);
             $label .= '*';
         }
-        $placeholder = ($placeholder == '') ? $label : $placeholder;
         $field = /* @lang HTML */
             "<div class='form-group " . $class . "'>";
         $field .= "<label for=$name>$label</label>";
         if ($type == 'textarea') {
-            $field .= "<textarea id=$name class='form-control' name=$name placeholder={$placeholder}>$values</textarea>";
+            $field .= "<textarea id=$name class='form-control' name={$name} >$values</textarea>";
         } else {
-            $field .= "<input type=$type class='form-control' id=$name name=$name placeholder=$placeholder value='" . $values . "' $required >";
+            $field .= "<input type=$type class='form-control' id=$name name=$name value='" . $values . "' $required >";
         }
         $field .= "<div class='invalid-feedback'>Champ requis !</div></div>";
 

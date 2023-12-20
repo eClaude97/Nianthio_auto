@@ -7,14 +7,21 @@ use App\Functions;
 use App\Models\User;
 use Class\Form;
 use DateTime;
+use http\Message;
 
 class UserController extends AppController
 {
+
     private array $typeOption  = array(
       ['value' => 'Admin', 'text' => 'Administrateur'],
       ['value' => 'Owner', 'text' => 'Fournisseur'],
       ['value' => 'Customer', 'text' => 'Client']
     );
+
+    const ERROR_RESET_PASS = 1;
+    const ERROR_CHANGE_PICTURE = 2;
+    const ERROR_CHANGE_DOC = 3;
+    const ERROR_USER_EDIT = 4;
 
     /**
      * @param string|null $success
@@ -98,8 +105,10 @@ class UserController extends AppController
         if (isset($_POST['edit'])){
             extract($_POST);
             $failed = false;
+            /* @var User|bool $user */
             $user = User::find($_POST['edit']);
             if ( $user === false ) $failed = true;
+            $_GET['id'] = $user->getToken();
             if (!$failed){
                 $datas = array(
                     'firstname' => $firstname, 'lastname' => $lastname, 'tel' => $tel, 'address' => $address,
@@ -108,10 +117,10 @@ class UserController extends AppController
                 );
                 $response = $user->update($user->getId(), $datas);
                 if ($response){
-                    $this->index('L\'utilisateur a été modifier avec succès');
+                    $this->profil("L'utilisateur a été modifier avec succès", true);
                 }
             } else {
-                $this->profil();
+                $this->profil("Error de mise a jour de l'utilisateur", error: self::ERROR_USER_EDIT);
             }
         }
     }
@@ -145,27 +154,29 @@ class UserController extends AppController
      * Cette méthode permet à un utilisateur de changer son mode de passe
      * @return void
      */
-    public function changePass(): void
+    public function reset_pass(): void
     {
-        if (isset($_POST['change_pass'])){
+        if (isset($_POST['reset_pass'])){
             extract($_POST);
             $failed = false;
-            /* @var User $user */$user = User::find($_POST['change_pass']);
+            /* @var User $user */
+            $user = User::find($_POST['reset_pass']);
             if (!$user) $failed = true;
             else{
-                if ($user->getPassword() !== $oldPass || $newPass !== $reNewPass) $failed = true;
+                if ($user->getPassword() !== SHA1($old_pass) || $new_pass !== $re_new_pass) $failed = true;
             }
+            $_GET['id'] = $user->getToken();
             if (!$failed){
                 $datas = array(
-                    'password' => SHA1($newPass),
+                    'password' => SHA1($new_pass),
                     'update_at' => (new DateTime())->format('Y-m-d-H-i')
                 );
                 $response = $user->update($user->getId() , $datas);
                 if ($response){
-                    $this->index('Mot de passe modifié avec succès');
+                    $this->profil('Mot de passe modifié avec succès', true);
                 }
             } else {
-                $this->profil('Mot de passe incorrect');
+                $this->profil('Mot de passe incorrect', false, self::ERROR_RESET_PASS);
             }
         }
     }
@@ -176,15 +187,20 @@ class UserController extends AppController
      */
     public function changeFile(): void
     {
-        if (isset($_POST['change_file'])){
+        if (isset($_POST['change_file']) or isset($_POST['del_file'])){
             extract($_POST);
             $failed = false;
-            /* @var User|bool $user */$user = User::find($_POST['change_file']);
-            $fichier = (isset($_FILES['picture']))
+            $id = $_POST['change_file'] ?? $_POST['del_file'];
+            /* @var User|bool $user */
+            $user = User::find($id);
+            $fichier = ( isset($_FILES['picture']))
                 ? Functions::uploadFiles($_FILES['picture'], 'Storage/profil/img/')
                 : Functions::uploadFiles($_FILES['doc'], 'Storage/profil/docs/', 'doc');
 
             if (!$fichier['success'] || $fichier['error'] !== false || $user === false) $failed = true;
+            if (isset($_POST['del_file'])) $failed = false;
+
+            $_GET['id'] = $user->getToken();
             if (!$failed){
                 if (isset($_FILES['picture'])) {
                     $datas = array('picture' => $fichier['name'], 'create_at' => (new DateTime())->format('d-m-Y-H-i-s'));
@@ -196,23 +212,28 @@ class UserController extends AppController
                 $response = $user->update($user->getId(), $datas);
                 if ($response){
                     if (isset($oldFile) && file_exists($oldFile)) unlink($oldFile);
-                    $this->profil();
+                    $this->profil('fichier mise à jour avec succès', true);
                 }
             } else {
-                $this->profil("Erreur de mise a jour du profil");
+                if (isset($_FILES['picture']))
+                    $this->profil("Erreur d'édition de l'image de profil", error:self::ERROR_CHANGE_PICTURE);
+                else
+                    $this->profil("Erreur d'édition du document de profil", error:self::ERROR_CHANGE_DOC);
             }
         }
     }
 
     /**
-     * @param string|null $error
+     * @param string|null $message
+     * @param bool|null $success
+     * @param int|null $error
      * @return void
      */
-    public function profil(?string $error = null): void
+    public function profil(?string $message = null, ?bool $success = null, ?int $error = null): void
     {
         $form = new Form();
         $user = User::find($_GET['id'], keyName: 'token');
-        $this->render('admin.user.profil', compact('form', 'user', 'error'));
+        $this->render('admin.user.profil', compact('form', 'user', 'message', 'success', 'error'));
     }
 
     /**
