@@ -1,3 +1,4 @@
+<?php /* @var Class\Form $form */ ?>
 <!-- Main Content -->
 <div class="main-content">
     <section class="section">
@@ -18,8 +19,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <?= /* @var \Class\Form $form */
-                        $form->inputField('firstname', label: 'Prénom', required: 'required', class: 'col-md-6') ?>
+                        <?= $form->inputField('firstname', label: 'Prénom', required: 'required', class: 'col-md-6') ?>
                         <?= $form->inputField('lastname', label: 'Nom', required: 'required', class: 'col-md-6') ?>
                     </div>
                     <div class="row">

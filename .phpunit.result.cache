@@ -1,1 +1,0 @@
-{"version":1,"defects":{"test\\FormTest::testInputField":7,"test\\FormTest::testFileField":7,"test\\FormTest::testCheckboxField":7,"test\\FormTest::testSelectField":7},"times":{"test\\FormTest::testInputField":0.02,"test\\FormTest::testSelectField":0,"test\\FormTest::testFileField":0,"test\\FormTest::testCheckboxField":0}}

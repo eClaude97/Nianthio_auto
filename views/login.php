@@ -1,3 +1,4 @@
+<?php /* @var Class\Form $form */ ?>
 <section class="section">
     <div class="container mt-5">
         <div class="row">
@@ -12,7 +13,7 @@
                     <?php endif; ?>
                     <div class="card-body">
                         <form method="POST" action="?p=auth.log" class="needs-validation" novalidate="">
-                            <?= /* @var \Class\Form $form */ $form->inputField('login', 'text', required: "required"); ?>
+                            <?= $form->inputField('login', required: "required"); ?>
                             <div class="form-group">
                                 <div class="d-block">
                                     <label for="password" class="control-label">Password</label>
