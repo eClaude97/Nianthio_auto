@@ -240,4 +240,13 @@ class User extends AppModels
            return false;
        }
     }
+
+    public static function activate(int $id): bool
+    {
+        $state = CONNECT->prepare("UPDATE user SET active = true, update_at = ? WHERE id = ?");
+        $now = (new \DateTime())->format('YmdHis');
+        $state->bindParam(1, $now);
+        $state->bindParam(2, $id);
+        return $state->execute();
+    }
 }

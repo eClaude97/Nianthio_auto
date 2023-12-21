@@ -30,7 +30,16 @@ class AuthController extends AppController
                 $this->login('Login ou mot de passe incorrect');
             } else {
                 $_SESSION['user'] = $user;
-                header("location: ?p=admin.user.index");
+                if ($user['active']) {
+                    header("location: ?p=admin.user.index");
+                } else {
+                    if ($this->mail_for_activation((array)$user)){
+                        $this->activate_form();
+                    } else {
+                        $this->login('Erreur d\'envoie du mail d\'activation veuillez verifier votre address email 
+                        ou le changer si possible');
+                    }
+                }
             }
         }
     }
@@ -45,18 +54,43 @@ class AuthController extends AppController
         }
     }
 
-    public function mailToActivate(){
-        $to = "edemclaudek@gmail.com";
-        $subject = "test d'envoi de mail";
-        $message = "Envoie reussi :)";
+    public function activate_form(?string $error = null): void
+    {
+        $form = new Form();
+        $this->render('compte-activation', compact('form', 'error'));
+    }
+
+    public function mail_for_activation(array $user): bool
+    {
+        $to = $user['email'];
+        $subject = "Nianthio_auto Code d'activation";
+        $message = "Salut, {$user['firstname']} {$user['lastname']}\r\n";
+        $message .= "Votre Code d'activation : \r\n \r\n";
+        $message .= "{$user['activation_code']} \r\n \r\n";
 
         $header = "Content-Type: text/plain; charset: utf-8\r\n";
         $header .= "From: edemkumaza30@gmail.com\r\n";
 
-        if (mail($to, $subject, $message, $header)){
-            echo "envoyer";
-        } else {
-            echo "Erreur";
+        return mail($to, $subject, $message, $header);
+    }
+
+    /**
+     * Cette methode permet d'activer le compte d'un utilisateur
+     * @return void
+     */
+    public function activate(): void
+    {
+        if (isset($_POST['activate']) && !empty($_SESSION)){
+            extract($_POST);
+            if ( !$_SESSION['user']['active'] && $_SESSION['user']['activation_code'] == $_POST['code'] ) {
+                if ( User::activate($_SESSION['user']['id']) ) {
+                    header("location: ?p=admin.user.index"); // TODO lien à modifier
+                } else {
+                    $this->activate_form("Erreur d'activation du compte");
+                }
+            } else {
+                $this->activate_form("Code d'activation incorrecte");
+            }
         }
     }
 
